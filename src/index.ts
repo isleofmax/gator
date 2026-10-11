@@ -1,13 +1,30 @@
-import { setUser, readConfig } from "./config";
+import { type CommandsRegistry, registerCommand, runCommand} from "./commands";
+import { handlerLogin } from "./login";
+import { argv, exit } from "node:process";
 
 function main() {
-	setUser("Massimo");
-	const cfg = readConfig();
-	if (cfg === undefined) {
-		console.log("config file not read");
-		return;
+	const command = argv.slice(2);
+	if (command.length < 1) {
+		console.log("please give a command");
+		exit(1);
 	}
-	console.log(cfg);
+
+	const cmdName = command[0];
+	const cmdArgs = command.slice(1);
+	const registry: CommandsRegistry = {};
+
+	registerCommand(registry, "login", handlerLogin);
+
+	try {
+		runCommand(registry, cmdName, ...cmdArgs);
+	} catch(err) {
+		if (err instanceof Error) {
+			console.error(`Error: ${err.message}`);
+		} else {
+			console.error(`Error executing command ${cmdName}`);
+		}
+		exit(1);
+	}
 }
 
 main();
