@@ -9,7 +9,7 @@ export type Config = {
 
 export function setUser(user: Sring) {
 	const cfg = {
-		db_url: "postgres://example",
+		db_url: "postgres://postgres:postgres@localhost:5432/gator?sslmode=disable",
 		current_user_name: user
 	};
 	const filePath = getConfigFilePath();
