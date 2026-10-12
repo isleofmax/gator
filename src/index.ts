@@ -2,7 +2,7 @@ import { type CommandsRegistry, registerCommand, runCommand} from "./commands";
 import { handlerLogin } from "./login";
 import { argv, exit } from "node:process";
 
-function main() {
+async function main() {
 	const command = argv.slice(2);
 	if (command.length < 1) {
 		console.log("please give a command");
@@ -16,7 +16,7 @@ function main() {
 	registerCommand(registry, "login", handlerLogin);
 
 	try {
-		runCommand(registry, cmdName, ...cmdArgs);
+		await runCommand(registry, cmdName, ...cmdArgs);
 	} catch(err) {
 		if (err instanceof Error) {
 			console.error(`Error: ${err.message}`);
@@ -25,6 +25,7 @@ function main() {
 		}
 		exit(1);
 	}
+	exit(0);
 }
 
 main();
