@@ -1,6 +1,5 @@
 import { type CommandsRegistry, registerCommand, runCommand} from "./commands";
-import { handlerLogin } from "./login";
-import { handlerRegister } from "./register";
+import { handlerLogin, handlerRegister } from "./users";
 import { handlerReset } from "./reset";
 import { argv, exit } from "node:process";
 
