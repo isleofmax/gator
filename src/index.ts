@@ -1,5 +1,5 @@
 import { type CommandsRegistry, registerCommand, runCommand} from "./commands";
-import { handlerLogin, handlerRegister } from "./users";
+import { handlerLogin, handlerRegister, handlerGetUsers } from "./users";
 import { handlerReset } from "./reset";
 import { argv, exit } from "node:process";
 
@@ -17,6 +17,7 @@ async function main() {
 	registerCommand(registry, "login", handlerLogin);
 	registerCommand(registry, "register", handlerRegister);
 	registerCommand(registry, "reset", handlerReset);
+	registerCommand(registry, "users", handlerGetUsers);
 
 	try {
 		await runCommand(registry, cmdName, ...cmdArgs);
