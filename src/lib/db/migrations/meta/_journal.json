@@ -15,6 +15,13 @@
       "when": 1792093774938,
       "tag": "0001_ordinary_angel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792126801911,
+      "tag": "0002_striped_the_enforcers",
+      "breakpoints": true
     }
   ]
 }

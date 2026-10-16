@@ -1,4 +1,8 @@
 import { XMLParser } from "fast-xml-parser";
+import { readConfig } from "./config";
+import { getUserByName } from "./lib/db/queries/users";
+import { createFeed, getFeeds } from "./lib/db/queries/feeds";
+import type { Feed, User } from "./lib/db/schema";
 
 export type RSSFeed = {
 	channel: {
@@ -76,5 +80,29 @@ export async function fetchFeed(feedURL: string) {
   }
 
   return rss;
+}
+
+export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+	if (args.length !== 2) {
+		throw new Error(`Usage: ${cmdName} <name> <url>`);
+	}
+	const name = args.shift();
+	const url  = args.shift();
+	const currentUser = readConfig().currentUserName;
+
+  const user = await getUserByName(currentUser);
+  const feed = await createFeed(currentUser, name, url);
+  if (!feed) {
+    throw new Error(`Failed to create feed`);
+  }
+  printFeed(user, feed);
+}
+
+export async function handlerFeeds(cmdName: string, ...args: string[]) {
+  
+}
+
+function printFeed(user: User, feed: Feed) {
+  console.log(`Added the feed ${feed.name} with user ${user.name}`);
 }
 

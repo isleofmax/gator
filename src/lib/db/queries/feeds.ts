@@ -1,13 +1,14 @@
 import { db } from "..";
 import { eq } from "drizzle-orm";
-import { feeds, users } from "../schema";
+import { feeds } from "../schema";
+import { getUserByName } from "./users";
 
 export async function createFeed(userName: string, title: string, url: string) {
-  const user = await users.getUser(userName);
+  const user = await getUserByName(userName);
   if (!user) {
     throw new Error(`Cannot find user ${userName}`);
   }
 
-	const [result] = await db.insert(feeds).values({ name: title, url: usr, userId: user.id }).returning();
+	const [result] = await db.insert(feeds).values({ name: title, url: url, userId: user.id }).returning();
 	return result;
 }
