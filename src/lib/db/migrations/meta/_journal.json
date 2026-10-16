@@ -8,6 +8,13 @@
       "when": 1791707570971,
       "tag": "0000_sleepy_white_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792093774938,
+      "tag": "0001_ordinary_angel",
+      "breakpoints": true
     }
   ]
 }

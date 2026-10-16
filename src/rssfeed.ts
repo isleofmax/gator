@@ -18,87 +18,63 @@ export type RSSItem = {
 
 export async function fetchFeed(feedURL: string) {
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  const res = await fetch(feedURL, {
+  const response = await fetch(feedURL, {
     headers: {
-      "User-Agent": "gator",
-    },
-  });
-  if (!res.ok) {
-    throw new Error(`failed to fetch feed: ${res.status} ${res.statusText}`);
-  }
-
-  const xml = await res.text();
-  const parser = new XMLParser({
-    processEntities: false,
-  });
-  let result = parser.parse(xml);
-
-  const channel = result.rss?.channel;
-  if (!channel) {
-    throw new Error("failed to parse channel");
-  }
-
-  if (
-    !channel ||
-    !channel.title ||
-    !channel.link ||
-    !channel.description ||
-    !channel.item
-  ) {
-    throw new Error("failed to parse channel");
-  }
-
-  const items: any[] = Array.isArray(channel.item)
-    ? channel.item
-    : [channel.item];
-
-  const rssItems: RSSItem[] = [];
-
-  for (const item of items) {
-    if (!item.title || !item.link || !item.description || !item.pubDate) {
-      continue;
+      "User-Agent": "gator"
     }
+  });
+  if (!response.ok) {
+    throw new Error(`Error fetching ${feedURL}`);
+  }
 
-    rssItems.push({
-      title: item.title,
-      link: item.link,
-      description: item.description,
-      pubDate: item.pubDate,
-    });
+  const result = await response.text();
+  const parser = new XMLParser({
+    processEntities: false
+  });
+
+  const xmlObj = parser.parse(result);
+  
+  if (!xmlObj.rss.channel) {
+    throw new Error("Error parsing data: channel tag not found");
+  }
+
+  if (!xmlObj.rss.channel.title ||
+      !xmlObj.rss.channel.link  ||
+      !xmlObj.rss.channel.description) {
+    throw new Error("Error parsing data: title or link or description tag not found");
+  }
+
+  const title = xmlObj.rss.channel.title;
+  const link = xmlObj.rss.channel.link;
+  const description = xmlObj.rss.channel.description;
+
+  let items: RSSItem[] = [];
+  if (Array.isArray(xmlObj.rss.channel.item)) {
+    for (let item of xmlObj.rss.channel.item) {
+      if (!item.title   ||
+          !item.link    ||
+          !item.pubDate ||
+          !item.description) {
+        continue;
+      }
+      items.push({
+        title: item.title,
+        link: item.link,
+        description: item.description,
+        pubDate: item.pubDate
+      });
+    }
   }
 
   const rss: RSSFeed = {
     channel: {
-      title: channel.title,
-      link: channel.link,
-      description: channel.description,
-      item: rssItems,
-    },
-  };
+      title: title,
+      link: link,
+      description: description,
+      item: items
+    }
+  }
 
-  console.log(rss);
   return rss;
 }
 
