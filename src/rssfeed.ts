@@ -99,7 +99,17 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
 }
 
 export async function handlerFeeds(cmdName: string, ...args: string[]) {
-  
+  if (args.length !== 0) {
+    throw new Error(`Usage: ${cmdName}`);
+  }
+  const feeds = await getFeeds();
+  if (feeds.length === 0) {
+    console.log("No feeeds found!");
+    return;
+  }
+  for (let feed of feeds) {
+    console.log(`Feed: ${feed.feedName} - url: ${feed.feedUrl} - user: ${feed.userName}`);
+  }
 }
 
 function printFeed(user: User, feed: Feed) {
