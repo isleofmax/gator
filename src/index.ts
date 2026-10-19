@@ -3,6 +3,7 @@ import { handlerLogin, handlerRegister, handlerGetUsers } from "./users";
 import { handlerReset } from "./reset";
 import { handlerAgg } from "./aggregate";
 import { handlerAddFeed, handlerFeeds } from "./rssfeed";
+import { handlerFollow, handlerFollowing } from "./follows";
 import { argv, exit } from "node:process";
 
 async function main() {
@@ -23,6 +24,8 @@ async function main() {
 	registerCommand(registry, "agg", handlerAgg);
 	registerCommand(registry, "addfeed", handlerAddFeed);
 	registerCommand(registry, "feeds", handlerFeeds);
+	registerCommand(registry, "follow", handlerFollow);
+	registerCommand(registry, "following", handlerFollowing);
 
 	try {
 		await runCommand(registry, cmdName, ...cmdArgs);

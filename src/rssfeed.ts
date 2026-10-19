@@ -2,6 +2,8 @@ import { XMLParser } from "fast-xml-parser";
 import { readConfig } from "./config";
 import { getUserByName } from "./lib/db/queries/users";
 import { createFeed, getFeeds } from "./lib/db/queries/feeds";
+import { createFeed, getFeeds } from "./lib/db/queries/feeds";
+import { createFeedFollow } from ".lib/db/queries/follows";
 import type { Feed, User } from "./lib/db/schema";
 
 export type RSSFeed = {
@@ -92,6 +94,7 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
 
   const user = await getUserByName(currentUser);
   const feed = await createFeed(currentUser, name, url);
+  await createFeedFollow(url);
   if (!feed) {
     throw new Error(`Failed to create feed`);
   }
