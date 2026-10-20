@@ -1,4 +1,9 @@
-import { createFeedFollow, getFeedFollowsForUser, type FeedFollowName } from "./lib/db/queries/follows";
+import { createFeedFollow,
+         getFeedFollowsForUser,
+         type FeedFollowName
+       } from "./lib/db/queries/follows";
+import { readConfig } from "./config";
+
 
 export async function handlerFollow(cmdName: string, ...args: string[]) {
 	if (args.length !== 1) {
@@ -10,9 +15,10 @@ export async function handlerFollow(cmdName: string, ...args: string[]) {
 }
 
 export async function handlerFollowing(cmdName: string, ...args: string[]) {
-  const follows = await getFeedFollowsForUser();
+  const userName = readConfig().currentUserName;
+  const follows = await getFeedFollowsForUser(userName);
   for (let follow of follows) {
-    console.log(follow);
+    console.log(`${follow.userName} follows ${follow.feedName}`);
   }
 }
 

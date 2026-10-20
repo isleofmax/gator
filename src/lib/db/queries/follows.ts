@@ -24,7 +24,7 @@ export async function createFeedFollow(url: string) {
   return followName;
 }
 
-export async function getFeedFollowsForUser(user: string) {
+export async function getFeedFollowsForUser(userName: string) {
 	const results = await db.select({
     ffId: feedFollow.id,
     ffCreated: feedFollow.createdAt,
@@ -34,6 +34,8 @@ export async function getFeedFollowsForUser(user: string) {
   })
   .from(feedFollow)
   .innerJoin(feeds, eq(feedFollow.feedId, feeds.id))
-  .innerJoin(users, eq(feedFollow,userId, users.id))
-  .where(eq(user, users.name));
+  .innerJoin(users, eq(feedFollow.userId, users.id))
+  .where(eq(userName, users.name));
+
+  return results;
 }

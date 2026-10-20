@@ -2,8 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 import { readConfig } from "./config";
 import { getUserByName } from "./lib/db/queries/users";
 import { createFeed, getFeeds } from "./lib/db/queries/feeds";
-import { createFeed, getFeeds } from "./lib/db/queries/feeds";
-import { createFeedFollow } from ".lib/db/queries/follows";
+import { createFeedFollow } from "./lib/db/queries/follows";
 import type { Feed, User } from "./lib/db/schema";
 
 export type RSSFeed = {
