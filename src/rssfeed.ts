@@ -1,5 +1,4 @@
 import { XMLParser } from "fast-xml-parser";
-import { readConfig } from "./config";
 import { getUserByName } from "./lib/db/queries/users";
 import { createFeed, getFeeds } from "./lib/db/queries/feeds";
 import { createFeedFollow } from "./lib/db/queries/follows";
@@ -83,16 +82,13 @@ export async function fetchFeed(feedURL: string) {
   return rss;
 }
 
-export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+export async function handlerAddFeed(cmdName: string, user: User, ...args: string[]) {
 	if (args.length !== 2) {
 		throw new Error(`Usage: ${cmdName} <name> <url>`);
 	}
 	const name = args.shift();
 	const url  = args.shift();
-	const currentUser = readConfig().currentUserName;
-
-  const user = await getUserByName(currentUser);
-  const feed = await createFeed(currentUser, name, url);
+  const feed = await createFeed(user.name, name, url);
   await createFeedFollow(url);
   if (!feed) {
     throw new Error(`Failed to create feed`);
@@ -104,6 +100,12 @@ export async function handlerFeeds(cmdName: string, ...args: string[]) {
   if (args.length !== 0) {
     throw new Error(`Usage: ${cmdName}`);
   }
+	const currentUser = readConfig().currentUserName;
+  const user = await getUserByName(currentUser);
+  if (!user) {
+    throw new Error(`User ${user} not found`);
+  }
+
   const feeds = await getFeeds();
   if (feeds.length === 0) {
     console.log("No feeeds found!");
