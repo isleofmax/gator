@@ -4,6 +4,7 @@ import { createFeedFollow,
          type FeedFollowName
        } from "./lib/db/queries/follows.ts";
 import { User } from "./lib/db/schema.ts";
+import { getFeedByUrl } from "./lib/db/queries/feeds.ts";
 
 export async function handlerFollow(cmdName: string, user: User, ...args: string[]) {
 	if (args.length !== 1) {
@@ -28,5 +29,6 @@ export async function handlerRemoveFollow(cmdName: string, user: User, ...args: 
 	}
 
 	const url = args[0];
-  const follows = await removeFollowing(user.id, url);
+  const feed = await getFeedByUrl(url);
+  const follows = await removeFollowing(user.id, feed.feedId);
 }

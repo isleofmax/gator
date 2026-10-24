@@ -1,5 +1,5 @@
 import { db } from "../index.ts";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { feeds, users, feedFollow } from "../schema.ts";
 import { getUserByName } from "./users.ts";
 import { readConfig } from "../../../config.ts";
@@ -40,5 +40,6 @@ export async function getFeedFollowsForUser(userName: string) {
   return results;
 }
 
-export async function removeFollowing(userId: string, usr: string) {
+export async function removeFollowing(userId: string, feedId: string) {
+  await db.delete(feedFollow).where(and(eq(feedFollow.userId, userId), eq(feedFollow.feedId, feedId))).returning();
 }
