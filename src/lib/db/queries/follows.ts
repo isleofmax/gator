@@ -39,3 +39,6 @@ export async function getFeedFollowsForUser(userName: string) {
 
   return results;
 }
+
+export async function removeFollowing(userId: string, usr: string) {
+}
