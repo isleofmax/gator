@@ -1,8 +1,8 @@
 import { createFeedFollow,
          getFeedFollowsForUser,
          type FeedFollowName
-       } from "./lib/db/queries/follows";
-import { User } from "src/lib/db/schema";
+       } from "./lib/db/queries/follows.ts";
+import { User } from "./lib/db/schema.ts";
 
 export async function handlerFollow(cmdName: string, user: User, ...args: string[]) {
 	if (args.length !== 1) {
@@ -21,3 +21,9 @@ export async function handlerFollowing(cmdName: string, user: User, ...args: str
   }
 }
 
+export async function handlerRemoveFollow(cmdName: string, user: User, ...args: string[]) {
+  const follows = await getFeedFollowsForUser(user.name);
+  for (let follow of follows) {
+    console.log(`${follow.userName} follows ${follow.feedName}`);
+  }
+}

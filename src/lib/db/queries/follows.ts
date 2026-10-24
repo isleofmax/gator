@@ -1,8 +1,8 @@
-import { db } from "..";
+import { db } from "../index.ts";
 import { eq } from "drizzle-orm";
-import { feeds, users, feedFollow } from "../schema";
-import { getUserByName } from "./users";
-import { readConfig } from "../../../config";
+import { feeds, users, feedFollow } from "../schema.ts";
+import { getUserByName } from "./users.ts";
+import { readConfig } from "../../../config.ts";
 
 export type FeedFollowName = {
   user: string;
@@ -35,7 +35,7 @@ export async function getFeedFollowsForUser(userName: string) {
   .from(feedFollow)
   .innerJoin(feeds, eq(feedFollow.feedId, feeds.id))
   .innerJoin(users, eq(feedFollow.userId, users.id))
-  .where(eq(userName, users.name));
+  .where(eq(users.name, userName));
 
   return results;
 }

@@ -1,4 +1,4 @@
-import { fetchFeed } from "./rssfeed";
+import { fetchFeed } from "./rssfeed.ts";
 
 export async function handlerAgg(cmdName: string, ...args: string[]) {
 	const feed = await fetchFeed("https://www.wagslane.dev/index.xml");

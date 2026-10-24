@@ -1,7 +1,7 @@
-import { db } from "..";
+import { db } from "../index.ts";
 import { eq } from "drizzle-orm";
-import { feeds, users } from "../schema";
-import { getUserByName } from "./users";
+import { feeds, users } from "../schema.ts";
+import { getUserByName } from "./users.ts";
 
 export async function createFeed(userName: string, title: string, url: string) {
   const user = await getUserByName(userName);

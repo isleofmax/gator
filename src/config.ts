@@ -7,7 +7,7 @@ export type Config = {
 	currentUserName: string;
 };
 
-export function setUser(user: Sring) {
+export function setUser(user: string) {
 	const cfg = {
 		db_url: "postgres://postgres:postgres@localhost:5432/gator?sslmode=disable",
 		current_user_name: user
@@ -19,7 +19,7 @@ export function setUser(user: Sring) {
 export function readConfig(): Config {
 	const filePath = getConfigFilePath();
 	const cfg_file = fs.readFileSync(filePath, { encoding: "utf-8" });
-	const cfg_obj: Config = validateConfig(JSON.parse(cfg_file));
+	const cfg_obj  = validateConfig(JSON.parse(cfg_file));
 	return cfg_obj;
 }
 
@@ -27,9 +27,9 @@ function getConfigFilePath(): string {
 	return path.join(os.homedir(), ".gatorconfig.json");
 }
 
-function validateConfig(rawConfig: Any): Config {
+function validateConfig(rawConfig: any): Config {
 	if ("db_url" in rawConfig && "current_user_name" in rawConfig) {
 		return { dbUrl: rawConfig.db_url, currentUserName: rawConfig.current_user_name ?? ""};
 	}
-	return undefined;
+	throw new Error("Cannot read config file");
 }

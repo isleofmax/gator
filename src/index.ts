@@ -1,11 +1,11 @@
-import { type CommandsRegistry, registerCommand, runCommand, middlewareLoggedIn } from "./commands";
-import { handlerLogin, handlerRegister, handlerGetUsers } from "./users";
-import { handlerReset } from "./reset";
-import { handlerAgg } from "./aggregate";
-import { handlerAddFeed, handlerFeeds } from "./rssfeed";
-import { handlerFollow, handlerFollowing } from "./follows";
+import { type CommandsRegistry, registerCommand, runCommand } from "./commands.ts";
+import { handlerLogin, handlerRegister, handlerGetUsers } from "./users.ts";
+import { handlerReset } from "./reset.ts";
+import { handlerAgg } from "./aggregate.ts";
+import { handlerAddFeed, handlerFeeds } from "./rssfeed.ts";
+import { handlerFollow, handlerFollowing, handlerRemoveFollow } from "./follows.ts";
 import { argv, exit } from "node:process";
-import { middlewareLoggedIn } from "./middleware";
+import { middlewareLoggedIn } from "./middleware.ts";
 
 async function main() {
 	const command = argv.slice(2);
@@ -27,6 +27,7 @@ async function main() {
 	registerCommand(registry, "feeds", handlerFeeds);
 	registerCommand(registry, "follow", middlewareLoggedIn(handlerFollow));
 	registerCommand(registry, "following",  middlewareLoggedIn(handlerFollowing));
+	registerCommand(registry, "unfollow",  middlewareLoggedIn(handlerRemoveFollow));
 
 	try {
 		await runCommand(registry, cmdName, ...cmdArgs);

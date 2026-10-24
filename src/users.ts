@@ -1,5 +1,5 @@
-import { setUser, readConfig } from "./config";
-import { getUserByName, getUsers, createUser } from "./lib/db/queries/users";
+import { setUser, readConfig } from "./config.ts";
+import { getUserByName, getUsers, createUser } from "./lib/db/queries/users.ts";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
 	if (args.length !== 1) {
