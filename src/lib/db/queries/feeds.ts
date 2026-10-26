@@ -31,9 +31,16 @@ export async function getFeedByUrl(url: string) {
 }
 
 export async function markFeedFetched(id: string) {
-  const now = Date.now();
-  await db.update(feeds).set({ updatedAt: new Date(now), lastFetchedAt: new Date(now) }).where(eq(feeds.id, id));
+  const result = await db.update(feeds).set({ lastFetchedAt: new Date() }).where(eq(feeds.id, id)).returning();
+  return result;
 }
 
 export async function getNextFeedToFetch() {
+  const [result] = await db
+    .select()
+    .from(feeds)
+    .orderBy(sql`${feeds.lastFetchedAt} asc nulls first`)
+    .limit(1);
+  return result;
 }
+
