@@ -1,5 +1,5 @@
 import { db } from "../index.ts";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { feeds, users } from "../schema.ts";
 import { getUserByName } from "./users.ts";
 
@@ -28,4 +28,12 @@ export async function getFeedByUrl(url: string) {
   }).from(feeds).where(eq(feeds.url, url));
 
   return result;
+}
+
+export async function markFeedFetched(id: string) {
+  const now = Date.now();
+  await db.update(feeds).set({ updatedAt: new Date(now), lastFetchedAt: new Date(now) }).where(eq(feeds.id, id));
+}
+
+export async function getNextFeedToFetch() {
 }

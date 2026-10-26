@@ -15,7 +15,8 @@ export const feeds = pgTable("feeds", {
 	updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),
 	name: text("name").notNull(),
   url: text("url").notNull().unique(),
-  userId: uuid("user_id").references(() => users.id, {onDelete: "cascade"}).notNull()
+  userId: uuid("user_id").references(() => users.id, {onDelete: "cascade"}).notNull(),
+	lastFetchedAt: timestamp("last_fetched_at")
 });
 
 export type Feed = typeof feeds.$inferSelect; // feeds is the table object in schema.ts
